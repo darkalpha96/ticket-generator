@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/images/favicon-32x32.png"
+    />
+
+    <title>Frontend Mentor | Conference ticket generator</title>
+
+    <link rel="stylesheet" href="./success.css" />
+    <style>
+      @font-face {
+        font-family: Inconsolata;
+        src: url(./assets/fonts/Inconsolata-VariableFont_wdth\wght.ttf);
+      }
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+      body {
+        margin: 50px;
+        background-image: url("./assets/images/pattern-lines.svg"),
+          url("./assets/images/background-desktop.png");
+        position: relative;
+        background-size: cover;
+        background-repeat: repeat, no-repeat;
+        color: hsl(227, 47%, 96%);
+        text-align: center;
+        /* padding: 20px;  */
+      }
+      /* Top-right and Bottom-left squiggly lines */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("./assets/images/pattern-squiggly-line-top.svg"),
+          url("./assets/images/pattern-squiggly-line-bottom-desktop.svg");
+        background-size: 550px auto, 800px auto; /* Set sizes */
+        background-position: right 0px top 50px, bottom 0px left 0px;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        opacity: 5;
+        z-index: 5;
+      }
+      /* Centered Circle */
+      body::after {
+        content: "";
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(120%, 0%); /* Center the circle */
+        width: 140px; /* Adjust size */
+        height: 140px;
+        background-image: url("./assets/images/pattern-circle.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      .logo {
+        margin-bottom: 40px;
+      }
+
+      .title {
+        font-size: 40px;
+        font-family: Inconsolata;
+        font-weight: 800;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+      }
+      .description {
+        font-size: 17.5px;
+        font-family: Inconsolata;
+        font-weight: 400;
+        color: hsl(245, 15%, 58%);
+      }
+      .upload {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Align items to the left */
+        width: 100%; /* Set a width for alignment */
+        max-width: 350px;
+        height: 100%;
+        max-height: 200px;
+        margin: 0 auto; /* Center the container */
+        margin-top: 30px;
+      }
+      .avatar {
+        font-size: 20px;
+        font-family: Inconsolata;
+        font-weight: 400;
+        letter-spacing: 1px;
+        padding: 0 5px;
+        margin: 0 0 10px 0;
+      }
+      .avatar h6 {
+        margin: 0;
+        color: hsl(252, 6%, 83%);
+        font-family: Inconsolata;
+        font-weight: 400;
+      }
+      .upload-area {
+        width: 100%;
+        max-width: 350px;
+        height: 200px;
+        max-height: 200px;
+        border: 2px dashed hsl(245, 19%, 35%);
+        border-radius: 10px;
+        /* margin-bottom: 40px; */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+        backdrop-filter: blur(5px); /* Blurs everything behind it */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        /* overflow: hidden; */
+      }
+      .upload-area.drag-over {
+        background-color: rgba(255, 255, 255, 0.2); /* Highlight background */
+        border-color: hsl(7, 88%, 67%); /* Highlight border */
+      }
+      .upload-area:focus {
+        outline: 0.1px solid hsl(245, 15%, 58%); /* Define the focus border */
+        outline-offset: 4px; /* Add a gap between the button and the focus border */
+      }
+      .upload-icon {
+        border: 2px solid transparent;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+        backdrop-filter: blur(10px); /* Blurs everything behind it */
+        margin: 15px;
+      }
+      .upload-text {
+        font-size: 15px;
+        font-family: Inconsolata;
+        font-weight: 400;
+        color: hsl(245, 15%, 58%);
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      .upload-instructions {
+        display: flex;
+        align-items: center;
+        font-family: Inconsolata;
+        font-size: 10px;
+        color: hsl(245, 19%, 35%);
+      }
+      .upload-instructions-error {
+        display: flex;
+        font-family: Inconsolata;
+        font-size: 10px;
+        color: hsl(245, 19%, 35%);
+        margin-bottom: 10px;
+      }
+      .info-icon {
+        margin-right: 5px;
+        color: hsl(245, 19%, 35%);
+        fill: hsl(245, 19%, 35%);
+      }
+      .info-icon-error {
+        width: 12px; /* Ensure consistent width */
+        height: 12px; /* Ensure consistent height */
+        margin-right: 5px; /* Add margin to the right */
+        vertical-align: middle; /* Align the SVG vertically with the text */
+      }
+      .error {
+        color: hsl(7, 71%, 60%);
+      }
+      .email-error {
+        margin-top: 0px; /* Add margin to the left */
+      }
+      .error-message {
+        display: none; /* Hide the error message by default */
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        /* align-items: center; */
+        width: 100%;
+        max-width: 350px;
+        margin: 20px auto 0;
+      }
+      form label {
+        font-family: Inconsolata;
+        font-size: 14px;
+        font-weight: 400;
+        color: hsl(252, 6%, 83%);
+        margin-bottom: 5px;
+        /* margin-left: 0; */
+        text-align: left;
+        /* padding: 0; */
+        align-self: flex-start;
+      }
+      form input {
+        width: 100%;
+        max-width: 340px; /* Match max-width with upload area */
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px; /* Add padding to align text */
+        padding-right: 0;
+        margin-bottom: 20px;
+        border: 1px solid hsl(245, 19%, 35%);
+        border-radius: 5px;
+        font-family: Inconsolata;
+        font-size: 14px;
+        color: hsl(245, 19%, 35%);
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+      }
+      form input::placeholder {
+        margin-left: 10px; /* Add margin to placeholder text */
+        color: hsl(245, 19%, 35%);
+      }
+      form input:focus {
+        outline: 0.1px solid hsl(245, 15%, 58%); /* Define the focus border */
+        outline-offset: 4px; /* Add a gap between the button and the focus border */
+      }
+      form button {
+        width: 100%; /* Match width with upload area */
+        min-width: 350px; /* Match max-width with upload area */
+        padding: 10px;
+        background-color: hsl(7, 88%, 67%);
+        border: none;
+        border-radius: 5px;
+        font-family: Inconsolata;
+        font-size: 16px;
+        font-weight: 800;
+        color: hsl(248, 70%, 10%);
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 30px;
+      }
+      form button:hover {
+        background-color: hsl(7, 86%, 67%);
+      }
+      form button:focus {
+        outline: 0.1px solid hsl(245, 15%, 58%); /* Define the focus border */
+        outline-offset: 4px; /* Add a gap between the button and the focus border */
+      }
+      #previewContainer {
+        /* border: 1px solid red; */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* justify-content: center; */
+        width: 100%;
+        /* max-width: 50px; */
+        height: 100%;
+        /* max-height: 50px; */
+        /* position: relative; */
+      }
+      #previewImage {
+        width: 70px;
+        max-width: 70px; /* Ensure the image fits within the upload area */
+        height: 70px;
+        max-height: 70px; /* Ensure the image fits within the upload area */
+        border-radius: 10%;
+        margin-top: 15px;
+      }
+      #actionButtons {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+      #actionButtons button {
+        background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+        backdrop-filter: blur(5px); /* Blurs everything behind it */
+        border: none;
+        border-radius: 5px;
+        color: hsl(227, 47%, 96%);
+        font-family: Inconsolata;
+        font-size: 12px;
+        width: 120px;
+        height: 20px;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+        padding: 0;
+        margin-bottom: 15px;
+      }
+      #actionButtons button:hover {
+        background-color: hsl(245, 19%, 40%);
+      }
+      #actionButtons button:focus {
+        outline: 0.1px solid hsl(245, 15%, 58%); /* Define the focus border */
+        outline-offset: 4px; /* Add a gap between the button and the focus border */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="logo">
+      <img src="./assets/images/logo-full.svg" alt="Coding conf" />
+    </div>
+    <!-- Form starts -->
+    <div class="first-page">
+      <div class="title">
+        Your Journey to Coding Conf
+        <br />
+        2025 Starts Here!
+      </div>
+
+      <div class="description">
+        Secure your spot at next year's biggest coding conference.
+      </div>
+      <div class="upload">
+        <div class="avatar">
+          <h6>Upload Avatar</h6>
+        </div>
+        <div class="upload-area" id="uploadArea" tabindex="0">
+          <input type="file" id="fileInput" hidden />
+          <div id="previewContainer" style="display: none">
+            <img id="previewImage" alt="Preview" style="display: none" />
+            <div id="actionButtons" style="display: none">
+              <button id="removeImageButton" type="button">Remove Image</button>
+              <button id="changeImageButton" type="button">Change Image</button>
+            </div>
+          </div>
+          <div id="uploadPrompt">
+            <img
+              class="upload-icon"
+              src="./assets/images/icon-upload.svg"
+              alt="Upload Icon"
+            />
+            <div class="upload-text">Drag and drop or click to upload</div>
+          </div>
+        </div>
+        <div class="upload-instructions">
+          <img
+            class="info-icon"
+            src="./assets/images/icon-info.svg"
+            alt="info icon"
+            class="image"
+          />
+          <p>Upload your photo (JPG or PNG, max size: 500KB).</p>
+        </div>
+        <div class="upload-instructions error-message">
+          <svg
+            class="info-icon-error"
+            id="fileError"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="12px"
+            height="12px"
+            margin-right="5px"
+            vertical-align="middle"
+          >
+            <path
+              fill="hsl(7, 71%, 60%)"
+              d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm-1-15h2v2h-2zm0 4h2v8h-2z"
+            />
+          </svg>
+          <p class="error" id="fileError">
+            File too large. Please upload a photo under 500KB
+          </p>
+        </div>
+      </div>
+      <form class="form" action="/submit" method="post">
+        <label for="fullName"> Full Name </label>
+        <input
+          type="text"
+          id="fullName"
+          name="fullName"
+          placeholder="Enter your full name"
+          required
+        />
+
+        <label for="email"> Email Address </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="example@email.com"
+          required
+        />
+        <div class="upload-instructions-error error-message">
+          <svg
+            class="info-icon-error"
+            id="emailError"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="12px"
+            height="12px"
+            margin-top="0px"
+            margin-right="5px"
+          >
+            <path
+              fill="hsl(7, 71%, 60%)"
+              d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 22C6.486 22 2 17.514 2 12S6.486 2 12 2s10 4.486 10 10-4.486 10-10 10zm-1-15h2v2h-2zm0 4h2v8h-2z"
+            />
+          </svg>
+          <p class="error email-error" id="emailError">
+            Please enter a valid email address.
+          </p>
+        </div>
+
+        <label for="github"> GitHub Username </label>
+        <input
+          type="text"
+          id="github"
+          name="github"
+          placeholder="@yourusername"
+          required
+        />
+
+        <button class="button" type="submit">Generate My Ticket</button>
+      </form>
+    </div>
+    <!-- Form ends -->
+
+    <!-- Generated tickets starts -->
+    <div class="success">
+      <div class="congrats">
+        Congrats, <span class="name" id="customerName"></span>
+        <br />
+        Your ticket is ready.
+      </div>
+      <div class="mailing-info">
+        We've emailed your ticket to
+        <br />
+        <!-- Email Address -->
+        and will send updates in the run up to the event.
+      </div>
+      <div class="ticket-container">
+        <img
+          src="./assets/images/logo-full.svg"
+          style="margin-top: 20px; margin-left: 20px"
+          alt="Uploaded Avatar"
+        />
+        <h6 id="ticketDetails">Coding Conf Jan 31, 2025 / Austin, TX</h6>
+        <!-- Placeholder for uploaded image -->
+        <div class="user-details">
+          <img
+            id="ticketImage"
+            src="./assets/images/image-avatar.jpg"
+            alt="Uploaded Avatar"
+          />
+          <div class="ticket-text">
+            <p id="ticketName">Jonatan Kristoff</p>
+            <p id="ticketGithub">
+              <img
+                src="./assets/images/icon-github.svg"
+                alt=""
+              />@JonatanKristoff0101
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Generated tickets ends -->
+
+    <!-- <div class="attribution">
+      Challenge by
+      <a href="https://www.frontendmentor.io?ref=challenge">Frontend Mentor</a>.
+      Coded by <a href="#">Your Name Here</a>.
+    </div> -->
+    <script src="./script.js"></script>
+  </body>
+</html>

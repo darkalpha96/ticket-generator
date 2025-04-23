@@ -1,0 +1,87 @@
+.success {
+  display: none; /* Hide the success section by default */
+}
+.congrats {
+  margin-top: 20px;
+  font-family: inconsolata, monospace;
+  font-size: 50px;
+  font-weight: 800;
+}
+.mailing-info {
+  text-align: center;
+  margin: 30px auto 0;
+  /* margin-top: 20px; */
+  font-family: inconsolata, monospace;
+  font-size: 20px;
+  font-weight: 400;
+  max-width: 450px;
+}
+.ticket-container {
+  display: flex;
+  flex-direction: column;
+  background-image: url("./assets/images/pattern-ticket.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 500px;
+  max-width: 510px;
+  height: 235px;
+  max-height: 240px;
+  /* margin-top: 20px; */
+  margin: 30px auto 0;
+  align-items: flex-start;
+}
+#ticketImage {
+  width: 70px;
+  height: 70px;
+  border-radius: 10%;
+  object-fit: cover;
+  margin-left: 20px;
+  margin-top: auto;
+}
+.ticket-text {
+  display: flex;
+  flex-direction: column; /* Stack text vertically */
+  justify-content: center; /* Center text vertically */
+  margin-left: 10px;
+}
+.ticket-text p {
+  margin: 5px 0; /* Add spacing between text elements */
+  font-family: Inconsolata, monospace;
+  font-size: 20px;
+  color: hsl(0, 0%, 100%);
+  display: flex;
+  align-items: center;
+}
+p#ticketGithub {
+  font-size: 14px;
+  color: hsl(252, 6%, 83%);
+}
+.ticket-text p img {
+  width: 14px; /* Adjust the size of the icon */
+  height: 14px; /* Ensure consistent height */
+  margin-right: 5px; /* Add spacing between the icon and text */
+  vertical-align: middle; /* Align the icon with the text */
+}
+.ticket-container h6 {
+  margin-top: 10px;
+  margin-left: 60px;
+  margin-bottom: 20px;
+  align-self: flex-start;
+  font-family: inconsolata, monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: hsl(245, 15%, 58%);
+}
+.ticket-container p {
+  margin: 5px 0;
+  font-family: Inconsolata, monospace;
+  color: hsl(252, 6%, 83%);
+}
+.user-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+}
